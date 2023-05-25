@@ -1,6 +1,7 @@
 import { List, Detail, Toast, showToast, Icon, ActionPanel, Action } from "@raycast/api";
 import { useState, useEffect } from "react";
 import * as google from "./lib/google";
+import { EmailDetails } from "./lib/types";
 
 // Update the service name here for testing different providers
 const serviceName = "google";
@@ -8,9 +9,8 @@ const serviceName = "google";
 export default function Command() {
   const service = getService(serviceName);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [items, setItems] = useState<{ id: string; threadId: string; payload: { from: string; subject: string } }[]>(
-    []
-  );
+  const [items, setItems] = useState<EmailDetails[]>([]);
+  const [showingDetail, setShowingDetail] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -32,21 +32,33 @@ export default function Command() {
   if (isLoading) {
     return <Detail isLoading={isLoading} />;
   }
-
   return (
-    <List isLoading={isLoading}>
-      {items.map((item) => {
+    <List isLoading={isLoading} isShowingDetail={showingDetail}>
+      {items.map((item, id) => {
+        const props: Partial<List.Item.Props> = item.body
+          ? {
+            detail: <List.Item.Detail markdown={item.body} />,
+          }
+          : { detail: "No body" };
         return (
           <List.Item
-            key={item.id}
-            id={item.id}
-            icon={Icon.TextDocument}
-            title={item.payload.subject}
-            subtitle={item.payload.from}
-            // TODO: Add action to open email in browser
+            key={id}
+            id={item.link}
+            // TODO: add message sender profile picture
+            icon={item.img}
+            {...props}
+            title={item.subject}
+            subtitle={item.from}
             actions={
               <ActionPanel>
-                <Action.CopyToClipboard content="👋" />
+                <Action icon={"file.png"} title="Toggle Detail" onAction={() => setShowingDetail(!showingDetail)} />
+                <Action.OpenInBrowser url={item.link} />
+                <Action
+                  title="Logout"
+                  onAction={async () => {
+                    service.logout();
+                  }}
+                />
               </ActionPanel>
             }
           />
@@ -69,5 +81,6 @@ function getService(serviceName: string): Service {
 
 interface Service {
   authorize(): Promise<void>;
-  fetchInboxEmails(): Promise<{ id: string; threadId: string; payload: { from: string; subject: string } }[]>;
+  fetchInboxEmails(): Promise<EmailDetails[]>;
+  logout(): Promise<void>;
 }

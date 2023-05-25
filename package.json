@@ -2,7 +2,7 @@
   "$schema": "https://www.raycast.com/schemas/extension.json",
   "name": "gmail-client",
   "title": "Gmail_client",
-  "description": "Manage inbox right here in raycas",
+  "description": "Manage inbox right here in raycast",
   "icon": "command-icon.png",
   "author": "Parikshith",
   "categories": [
@@ -13,21 +13,22 @@
   "commands": [
     {
       "name": "index",
-      "title": "Check inbox",
-      "subtitle": "Check your inbox",
-      "description": "Shows your upto date inbox",
+      "title": "Send email",
+      "subtitle": "Send email to anyone",
+      "description": "Send email to anyone",
       "mode": "view"
     },
     {
-      "name": "oauth",
-      "title": "Login with Gmail",
-      "subtitle": "Login with Gmail",
+      "name": "checkInbox",
+      "title": "Check inbox",
+      "subtitle": "Shows your upto date inbox",
       "description": "Shows your upto date inbox",
       "mode": "view"
     }
   ],
   "dependencies": {
     "@raycast/api": "^1.51.3",
+    "dotenv": "^16.0.3",
     "node-fetch": "^3.3.1"
   },
   "devDependencies": {
