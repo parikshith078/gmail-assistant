@@ -1,6 +1,6 @@
 import { OAuth } from "@raycast/api";
 import fetch from "node-fetch";
-import { EmailDetails } from "./types";
+import { EmailDetails, SendMail } from "./types";
 // const clientId = process.env.CREDENTIALS as string;
 const clientId = "26438838656-r8modorr9qv3dhvlla36uj8u0vbfflov.apps.googleusercontent.com";
 const SCOPES = "https://www.googleapis.com/auth/gmail.readonly https://www.googleapis.com/auth/gmail.compose";
@@ -142,7 +142,43 @@ function getEmailLink(email: Email): string {
   const messageId = email.id;
   return `https://mail.google.com/mail/u/0/#inbox/${messageId}`;
 }
+export async function sendEmail(email: SendMail) {
+  const url = "https://gmail.googleapis.com/gmail/v1/users/me/messages/send";
+  const to = email.to;
+  const subject = email.subject;
+  const body = email.body;
 
+  const message = [
+    "Content-Type: text/plain; charset=utf-8",
+    "MIME-Version: 1.0",
+    "Content-Transfer-Encoding: 7bit",
+    `to: ${to}`,
+    `subject: ${subject}`,
+    "",
+    body,
+  ].join("\n");
+
+  const encodedMessage = Buffer.from(message)
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+
+  const response = await fetch(url, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${(await client.getTokens())?.accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      raw: encodedMessage,
+    }),
+  });
+
+  const result = (await response.json()) as any;
+  console.log(`Sent email to ${to}. Message id: ${result.id});`);
+  return result.id;
+}
 // API call to fetch unread emails from inbox
 
 // export async function fetchInboxEmails(): Promise<{ id: string; threadId: string; payload: any }[]> {

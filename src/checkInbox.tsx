@@ -1,7 +1,7 @@
 import { List, Detail, Toast, showToast, Icon, ActionPanel, Action } from "@raycast/api";
 import { useState, useEffect } from "react";
-import * as google from "./lib/google";
-import { EmailDetails } from "./lib/types";
+// import * as google from "./lib/google";
+import { EmailDetails, getService } from "./lib/types";
 
 // Update the service name here for testing different providers
 const serviceName = "google";
@@ -24,7 +24,7 @@ export default function Command() {
       } catch (error) {
         console.error(error);
         setIsLoading(false);
-        showToast({ style: Toast.Style.Failure, title: String(error) });
+        showToast({ style: Toast.Style.Failure, title: "Check your network connection" });
       }
     })();
   }, [service]);
@@ -69,18 +69,3 @@ export default function Command() {
 }
 
 // Services
-
-function getService(serviceName: string): Service {
-  switch (serviceName) {
-    case "google":
-      return google as Service;
-    default:
-      throw new Error("Unsupported service: " + serviceName);
-  }
-}
-
-interface Service {
-  authorize(): Promise<void>;
-  fetchInboxEmails(): Promise<EmailDetails[]>;
-  logout(): Promise<void>;
-}
