@@ -1,9 +1,7 @@
-import { List, Detail, Toast, showToast, Icon, ActionPanel, Action } from "@raycast/api";
+import { List, Detail, Toast, showToast, ActionPanel, Action } from "@raycast/api";
 import { useState, useEffect } from "react";
-// import * as google from "./lib/google";
 import { EmailDetails, getService } from "./lib/types";
 
-// Update the service name here for testing different providers
 const serviceName = "google";
 
 export default function Command() {
@@ -17,8 +15,6 @@ export default function Command() {
       try {
         await service.authorize();
         const fetchedItems = await service.fetchInboxEmails();
-        // console.log("Fetched items:");
-        // console.log(fetchedItems[0]);
         setItems(fetchedItems);
         setIsLoading(false);
       } catch (error) {
@@ -45,7 +41,6 @@ export default function Command() {
             key={id}
             id={item.link}
             // TODO: add message sender profile picture
-            icon={item.img}
             {...props}
             title={item.subject}
             subtitle={item.from}
