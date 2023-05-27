@@ -84,7 +84,7 @@ interface Email {
 }
 
 export async function fetchInboxEmails(): Promise<EmailDetails[]> {
-  const response = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=20", {
+  const response = await fetch("https://gmail.googleapis.com/gmail/v1/users/me/messages?maxResults=50&labelIds=INBOX", {
     method: "GET",
     headers: {
       Authorization: `Bearer ${(await client.getTokens())?.accessToken}`,
@@ -142,8 +142,13 @@ function getEmailLink(email: Email): string {
   const messageId = email.id;
   return `https://mail.google.com/mail/u/0/#inbox/${messageId}`;
 }
-export async function sendEmail(email: SendMail) {
-  const url = "https://gmail.googleapis.com/gmail/v1/users/me/messages/send";
+export async function sendEmail(email: SendMail, toDraft: boolean) {
+  let url = "";
+  if (!toDraft) {
+    url = "https://gmail.googleapis.com/gmail/v1/users/me/messages/send";
+  } else {
+    url = "https://gmail.googleapis.com/gmail/v1/users/me/drafts";
+  }
   const to = email.to;
   const subject = email.subject;
   const body = email.body;

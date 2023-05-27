@@ -6,9 +6,9 @@ export default function Command() {
   const service = getService("google");
   const [isLoading, setIsLoading] = useState(true);
   const [emailError, setEmailError] = useState<string | undefined>();
-
-  const bodyRef = useRef<Form.TextArea>(null);
-  const subjectRef = useRef<Form.TextField>(null);
+  const [to, setTo] = useState("");
+  const [subject, setSubject] = useState("");
+  const [body, setBody] = useState("");
 
   function dropEmailErrorIfNeeded() {
     if (emailError && emailError.length > 0) {
@@ -36,16 +36,23 @@ export default function Command() {
       }
     })();
   }, []);
-  const handelSubmit = async (values: SendMail) => {
+
+  const handelSend = async (toDraft: boolean) => {
     try {
-      const res = await service.sendEmail(values);
+      const values: SendMail = {
+        to,
+        subject,
+        body,
+      };
+
+      const res = await service.sendEmail(values, toDraft);
       console.log("submit:", res);
       console.log(typeof res);
-      if (typeof res == "string") {
+      if (typeof res === "string") {
         console.log("test");
         showToast({ style: Toast.Style.Success, title: "Mail sent" });
-        bodyRef.current?.reset();
-        subjectRef.current?.reset();
+        setSubject("");
+        setBody("");
         return;
       }
       showToast({ style: Toast.Style.Failure, title: "Failed to send" });
@@ -55,38 +62,55 @@ export default function Command() {
       showToast({ style: Toast.Style.Failure, title: "Failed to send the mail check your network connection" });
     }
   };
+
   return (
     <Form
       isLoading={isLoading}
       actions={
         <ActionPanel>
-          <Action.SubmitForm title="Send" onSubmit={handelSubmit} />
+          <Action.SubmitForm title="Send" onSubmit={() => handelSend(false)} />
+          <Action title="Send to Draft" onAction={() => handelSend(true)} />
         </ActionPanel>
       }
     >
       <Form.TextField
         id="to"
+        title="To"
         placeholder="To"
         autoFocus
         info="To address"
         error={emailError}
-        storeValue
-        onChange={dropEmailErrorIfNeeded}
-        onBlur={(event) => {
-          const value = event.target.value;
-          if (value && value.length > 0) {
-            if (!validateEmail(value)) {
-              setEmailError("Not a valid Email");
-            } else {
-              dropEmailErrorIfNeeded();
-            }
+        value={to}
+        onChange={(value) => {
+          setTo(value);
+          dropEmailErrorIfNeeded();
+        }}
+        onBlur={() => {
+          if (to.length === 0) {
+            setEmailError("The field shouldn't be empty!");
+          } else if (!validateEmail(to)) {
+            setEmailError("Not a valid Email");
           } else {
-            setEmailError("The field should't be empty!");
+            dropEmailErrorIfNeeded();
           }
         }}
       />
-      <Form.TextField id="subject" ref={subjectRef} storeValue={false} placeholder="Subject" info="Subject" />
-      <Form.TextArea id="body" ref={bodyRef} placeholder="Body" storeValue={false} info="Body" />
+      <Form.TextField
+        id="subject"
+        title="Subject"
+        placeholder="Subject"
+        info="Subject"
+        value={subject}
+        onChange={(value) => setSubject(value)}
+      />
+      <Form.TextArea
+        title="Content"
+        id="body"
+        placeholder="Body"
+        info="Body"
+        value={body}
+        onChange={(value) => setBody(value)}
+      />
     </Form>
   );
 }

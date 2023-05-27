@@ -11,12 +11,14 @@ export interface SendMail {
   to: string;
   subject: string;
   body: string;
+  scheduleTime?: Date;
+  files?: string[];
 }
 export interface Service {
   authorize(): Promise<void>;
   fetchInboxEmails(): Promise<EmailDetails[]>;
   logout(): Promise<void>;
-  sendEmail(email: SendMail): Promise<string | undefined>;
+  sendEmail(email: SendMail, toDraft: boolean): Promise<string | undefined>;
 }
 export function getService(serviceName: string): Service {
   switch (serviceName) {

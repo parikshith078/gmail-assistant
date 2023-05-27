@@ -1,9 +1,9 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "gmail-client",
-  "title": "Gmail_client",
-  "description": "Manage inbox right here in raycast",
-  "icon": "command-icon.png",
+  "name": "gmail-assistant",
+  "title": "Gmail Assistant",
+  "description": "This extension adds Gmail integration to Raycast, allowing users to send emails and check their inbox without leaving the Raycast interface.",
+  "icon": "gmail-icon.png",
   "author": "Parikshith",
   "categories": [
     "Productivity",
@@ -13,22 +13,24 @@
   "commands": [
     {
       "name": "index",
-      "title": "Send email",
-      "subtitle": "Send email to anyone",
-      "description": "Send email to anyone",
+      "title": "Send Email",
+      "subtitle": "Compose and send an email to anyone",
+      "description": "Compose and send an email to anyone using your Gmail account. You can specify the recipient, subject, and body of the email.",
+      "icon": "gmail-icon.png",
       "mode": "view"
     },
     {
       "name": "checkInbox",
-      "title": "Check inbox",
-      "subtitle": "Shows your upto date inbox",
-      "description": "Shows your upto date inbox",
+      "title": "Check Inbox",
+      "subtitle": "View your latest emails",
+      "description": "View your latest emails in your Gmail inbox. This command shows the sender, subject, and date of each email.",
+      "icon": "gmail-icon.png",
       "mode": "view"
     }
   ],
   "dependencies": {
     "@raycast/api": "^1.51.3",
-    "dotenv": "^16.0.3",
+    "@raycast/utils": "^1.7.0",
     "node-fetch": "^3.3.1"
   },
   "devDependencies": {

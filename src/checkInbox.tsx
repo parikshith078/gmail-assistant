@@ -1,6 +1,7 @@
 import { List, Detail, Toast, showToast, ActionPanel, Action } from "@raycast/api";
 import { useState, useEffect } from "react";
 import { EmailDetails, getService } from "./lib/types";
+import { getAvatarIcon } from "@raycast/utils";
 
 const serviceName = "google";
 
@@ -41,6 +42,7 @@ export default function Command() {
             key={id}
             id={item.link}
             // TODO: add message sender profile picture
+            icon={getAvatarIcon(item.from)}
             {...props}
             title={item.subject}
             subtitle={item.from}
