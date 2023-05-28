@@ -10,7 +10,7 @@ const client = new OAuth.PKCEClient({
   providerName: "Google",
   providerIcon: "google-logo.png",
   providerId: "google",
-  description: "Connect your Google account\n(Raycast Extension Demo)",
+  description: "Login with Gmail to continue",
 });
 
 export async function authorize(): Promise<void> {
@@ -181,7 +181,7 @@ export async function sendEmail(email: SendMail, toDraft: boolean) {
   });
 
   const result = (await response.json()) as any;
-  console.log(`Sent email to ${to}. Message id: ${result.id});`);
+  // console.log(`Sent email to ${to}. Message id: ${result.id});`);
   return result.id;
 }
 // API call to fetch unread emails from inbox

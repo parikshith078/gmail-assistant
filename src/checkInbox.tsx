@@ -34,8 +34,8 @@ export default function Command() {
       {items.map((item, id) => {
         const props: Partial<List.Item.Props> = item.body
           ? {
-            detail: <List.Item.Detail markdown={item.body} />,
-          }
+              detail: <List.Item.Detail markdown={item.body} />,
+            }
           : { detail: "No body" };
         return (
           <List.Item

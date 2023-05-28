@@ -1,5 +1,5 @@
 import { ActionPanel, Form, Action, Toast, showToast } from "@raycast/api";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { getService, SendMail } from "./lib/types";
 
 export default function Command() {
@@ -18,7 +18,7 @@ export default function Command() {
 
   function validateEmail(email: string): boolean {
     // Regular expression pattern to match email format
-    const emailPattern: RegExp = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     // Use the test() method of the regular expression to check if the email matches the pattern
     return emailPattern.test(email);
@@ -46,10 +46,10 @@ export default function Command() {
       };
 
       const res = await service.sendEmail(values, toDraft);
-      console.log("submit:", res);
-      console.log(typeof res);
+      // console.log("submit:", res);
+      // console.log(typeof res);
       if (typeof res === "string") {
-        console.log("test");
+        // console.log("test");
         showToast({ style: Toast.Style.Success, title: "Mail sent" });
         setSubject("");
         setBody("");
