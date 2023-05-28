@@ -1,0 +1,24 @@
+{
+  "screenshots": [
+    {
+      "title": "Gmail Assistant",
+      "description": "Compose and send an email to anyone using your Gmail account.",
+      "image": "gmail-assistant.png"
+    },
+    {
+      "title": "Send Email",
+      "description": "Compose and send an email to anyone using your Gmail account.",
+      "image": "send-email.png"
+    },
+    {
+      "title": "Check Inbox",
+      "description": "Toggle details view",
+      "image": "check-inbox-details.png"
+    },
+    {
+      "title": "Check Inbox",
+      "description": "View your latest emails in your Gmail inbox. Option to open mail in browser",
+      "image": "check-inbox.png"
+    }
+  ]
+}
